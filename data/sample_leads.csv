@@ -1,0 +1,22 @@
+company_name,contact_full_name,contact_email,contact_phone,website_url,sector,business_type,city,country
+Le Petit Bistrot Parisien,Camille Dubois,camille.dubois@lepetitbistrot.fr,+33612345678,https://www.lepetitbistrot.fr,CHR,restaurant,Paris,France
+Boulangerie Artisanale Ferrandi,Julien Ferrandi,julien@boulangerie-ferrandi.fr,+33698765432,https://boulangerie-ferrandi.fr,CHR,boulangerie,Lyon,France
+Café des Arts Marseillais,Nadia Benali,nadia.benali@cafedesarts.fr,+33654321098,https://www.cafedesarts-marseille.fr,CHR,cafe,Marseille,France
+Brasserie du Vieux Port,Marc Lefevre,contact@brasserieduvieuxport.fr,+33611223344,https://brasserieduvieuxport.fr,CHR,brasserie,Marseille,France
+Food Truck Saveurs du Sud,Youssef Trabelsi,youssef@saveursdusud.tn,+21622334455,https://saveursdusud.tn,CHR,food_truck,Sousse,Tunisie
+Restaurant Le Dattier,Amira Chaabane,amira.chaabane@ledattier.tn,+21698765412,https://www.ledattier.tn,CHR,restaurant,Tunis,Tunisie
+Pizzeria Bella Napoli,Giulia Romano,giulia@bellanapoli.fr,+33677889900,https://bellanapoli-lyon.fr,CHR,fast_food,Lyon,France
+Snack Chic Fast Food,Karim Ben Salah,karim.bensalah@snackchic.tn,+21655667788,https://snackchic.tn,CHR,fast_food,Sfax,Tunisie
+Boutique Chic Elegance,Sophie Marchand,sophie@chic-elegance.fr,+33645678912,https://www.chic-elegance-paris.fr,RETAIL,boutique_vetements,Paris,France
+Concept Store Nova,Thomas Girard,thomas.girard@novastore.fr,+33633445566,https://novastore.fr,RETAIL,concept_store,Bordeaux,France
+Epicerie Fine Terroir,Isabelle Roche,isabelle@epicerie-terroir.fr,+33622113344,https://epicerie-terroir.fr,RETAIL,epicerie_fine,Toulouse,France
+Fleuriste Les Jardins de Claire,Claire Petit,claire.petit@jardinsdeclaire.fr,+33611998877,https://jardinsdeclaire.fr,RETAIL,fleuriste,Nantes,France
+Boutique Artisanat Medina,Sami Gharbi,sami.gharbi@artisanatmedina.tn,+21690112233,https://artisanatmedina.tn,RETAIL,artisanat,Tunis,Tunisie
+Librairie Papeterie Plume,Nicolas Faure,nicolas@librairie-plume.fr,+33688776655,https://librairie-plume.fr,RETAIL,librairie,Strasbourg,France
+Cave a Vin Grand Cru,Pierre Dumont,pierre.dumont@cavegrandcru.fr,+33677665544,https://cavegrandcru.fr,RETAIL,cave_a_vin,Bordeaux,France
+Restaurant Traditionnel Dar Zaghouan,Leila Mansour,leila.mansour@darzaghouan.tn,+21623344556,https://darzaghouan.tn,CHR,restaurant,Zaghouan,Tunisie
+Cafe Gourmand Douceurs,Elodie Bernard,elodie@cafegourmand.fr,+33699887766,https://cafegourmand-nice.fr,CHR,cafe,Nice,France
+Boutique Deco Maison Zen,Antoine Roux,antoine.roux@maisonzen.fr,+33644556677,https://maisonzen-deco.fr,RETAIL,decoration,Montpellier,France
+Restaurant Sans Email,Fatma Jlassi,,+21611223345,https://restaurantsansemail.tn,CHR,restaurant,Sfax,Tunisie
+Boutique Secteur Invalide,Rania Ayadi,rania@boutiqueinvalide.tn,+21699887744,https://boutiqueinvalide.tn,FASHION,boutique_vetements,Monastir,Tunisie
+Email Casse Test,Hugo Blanc,hugo.blanc@,+33655443322,https://emailcasse.fr,CHR,restaurant,Lille,France
