@@ -10,8 +10,8 @@ def enrich(lead_id):
     body, status_code = enrich_lead(lead_id)
     return jsonify(body), status_code
 
-
-@enrichment_bp.get("/knowledge-base/search")
+"endpoint de search"
+@enrichment_bp.get("/knowledge-base/search") 
 def kb_search():
     query = request.args.get("q")
     k = request.args.get("k", 3, type=int)

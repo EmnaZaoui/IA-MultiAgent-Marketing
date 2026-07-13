@@ -62,8 +62,8 @@ def ingest_documents(folder_path: str) -> dict:
 
 
 def search_features(query: str, k: int = 3) -> list[dict]:
-    """Recherche sémantique dans la base de connaissances Fastriom.
-    Sera utilisée par l'agent Strategist en Sprint 3."""
+    """Recherche sémantique dans la base de connaissances Fastriom."""
+
     model = get_embedding_model()
     collection = get_collection()
 
