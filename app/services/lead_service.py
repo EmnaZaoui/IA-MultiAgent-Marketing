@@ -1,6 +1,6 @@
 from app.extensions import db
 from app.models.lead import Lead, LeadStatus
-from app.utils.validators import is_valid_email, is_valid_sector
+from app.utils.validators import is_valid_email, is_valid_sector, is_consumer_email_domain
 
 
 def build_lead_payload(row: dict, source: str) -> dict:
@@ -25,6 +25,9 @@ def validate_lead_payload(payload: dict) -> tuple[bool, str]:
     ok, msg = is_valid_email(payload["contact_email"])
     if not ok:
         return False, f"Email invalide: {msg}"
+
+    if is_consumer_email_domain(payload["contact_email"]):
+        return False, "Email B2C détecté (domaine grand public non autorisé, ex: gmail.com, yahoo.com)"
 
     ok, msg = is_valid_sector(payload["sector"])
     if not ok:
