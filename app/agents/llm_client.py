@@ -4,7 +4,7 @@ import requests
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 OLLAMA_CHAT_ENDPOINT = "/api/chat"
-REQUEST_TIMEOUT = 60
+REQUEST_TIMEOUT = 300
 
 
 class LLMError(Exception):
@@ -65,7 +65,10 @@ def _call_ollama(system_prompt: str, user_prompt: str, temperature: float) -> st
 
 
 def call_llm_json(system_prompt: str, user_prompt: str, temperature: float = 0.4) -> dict:
-   
+    """
+    Appelle le LLM configuré (Groq ou Ollama selon LLM_PROVIDER) et force une
+    réponse JSON structurée. Lève LLMError en cas d'échec réseau ou de JSON invalide.
+    """
     provider = os.getenv("LLM_PROVIDER", "groq").lower()
 
     if provider == "groq":

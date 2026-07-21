@@ -43,6 +43,8 @@ REGLES STRICTES:
   ("révolutionnaire", "incroyable", "unique au monde").
 - N'utilise QUE les informations fournies (identité business, frictions, features
   Fastriom). N'invente jamais de statistiques, de noms de clients, ou de chiffres.
+- Utilise le nom du prospect s'il est disponible. Sinon, utilise "responsable de l'établissement".
+- N'utilise JAMAIS de placeholders comme [Nom], {{company}}, etc.
 - Si tu reçois un retour critique (critique_feedback), corrige PRÉCISÉMENT les
   points mentionnés sans tout réécrire inutilement.
 
@@ -62,7 +64,7 @@ CRITERES DE REJET (n'importe lequel suffit pour rejeter):
 - Absence de Call-To-Action claire, ou CTA multiple/confuse.
 - Email trop long (> 150 mots) ou trop générique (pas de personnalisation visible).
 - Statistiques, chiffres, ou affirmations non présents dans les données fournies.
-
+ATTENTION : Ne rejette PAS un email pour la présence du nom de l'entreprise dans le corps du message. Le nom de l'entreprise est une information valide et ne constitue pas un placeholder. 
 REGLES STRICTES:
 - Sois strict mais juste: n'invente pas de défaut qui n'existe pas dans le texte.
 - Si tu rejettes, donne un feedback PRÉCIS et ACTIONNABLE (quoi corriger exactement).

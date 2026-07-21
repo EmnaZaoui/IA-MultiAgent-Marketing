@@ -83,6 +83,7 @@ def copywriter_node(state: AgentState) -> AgentState:
 
     user_prompt = (
         f"Entreprise: {state.get('company_name')} ({state.get('city')}, {state.get('country')})\n"
+        f"Nom du contact: {state.get('contact_full_name') or 'responsable de l établissement'}\n"
         f"Résumé business: {state.get('business_identity_summary')}\n"
         f"Points de friction identifiés:\n{friction_text}\n"
         f"Fonctionnalités Fastriom pertinentes:\n{features_text}"

@@ -35,7 +35,7 @@ class WebsiteScraper:
 
     def _clean_text(self, soup: BeautifulSoup) -> str:
         """Supprime le bruit (scripts, styles) et tronque pour protéger
-        le context window des futurs LLM (voir Risk Management du cahier des charges)."""
+        le context window des futurs LLM """
         for tag in soup(["script", "style", "noscript", "iframe", "svg"]):
             tag.decompose()
         text = soup.get_text(separator=" ", strip=True)
