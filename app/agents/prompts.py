@@ -72,6 +72,7 @@ REGLES STRICTES:
 FORMAT DE SORTIE: Réponds STRICTEMENT en JSON valide avec cette structure exacte:
 {"critique_status": "APPROVED ou REJECTED", "critique_feedback": "<feedback précis, ou null si approuvé>"}
 """
+
 PROSPECTOR_EXTRACTION_PROMPT = """Tu es "The Prospector", un expert en identification
 et qualification de prospects B2B pour les secteurs CHR (Café-Hôtellerie-Restauration)
 et Retail.

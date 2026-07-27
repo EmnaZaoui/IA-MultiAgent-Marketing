@@ -41,6 +41,18 @@ class WebsiteScraper:
         text = soup.get_text(separator=" ", strip=True)
         text = re.sub(r"\s+", " ", text)
         return text[: self.max_chars]
+    
+    EMAIL_REGEX = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+
+    def _extract_emails(self, raw_html: str) -> list:
+        """Extrait les adresses email visibles dans le HTML brut (texte + mailto:)."""
+        found = set(self.EMAIL_REGEX.findall(raw_html))
+        # Nettoyage des faux positifs classiques (ex: extensions de fichiers image confondues)
+        cleaned = {
+            email.lower() for email in found
+            if not email.lower().endswith((".png", ".jpg", ".jpeg", ".svg", ".gif", ".webp"))
+        }
+        return sorted(cleaned)
 
     def _find_about_page_url(self, base_url: str, soup: BeautifulSoup) -> str | None:
         for link in soup.find_all("a", href=True):
@@ -70,6 +82,7 @@ class WebsiteScraper:
             meta_tag = soup.find("meta", attrs={"name": "description"})
             result["meta_description"] = meta_tag["content"].strip() if meta_tag and meta_tag.get("content") else None
             result["homepage_text"] = self._clean_text(soup)
+            result["emails_found"] = self._extract_emails(response.text)
 
             about_url = self._find_about_page_url(url, soup)
             if about_url:
