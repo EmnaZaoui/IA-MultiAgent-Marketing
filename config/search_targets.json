@@ -1,0 +1,11 @@
+{
+  "targets": [
+    {"query": "restaurants Tunis", "business_type_hint": "restaurant"},
+    {"query": "cafes Tunis", "business_type_hint": "cafe"},
+    {"query": "boulangeries Sfax", "business_type_hint": "boulangerie"},
+    {"query": "boutiques vetements Tunis", "business_type_hint": "boutique_vetements"},
+    {"query": "restaurants Sousse", "business_type_hint": "restaurant"},
+    {"query": "epiceries fines Tunis", "business_type_hint": "epicerie_fine"}
+  ],
+  "max_results_per_target": 8
+}
