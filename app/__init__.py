@@ -22,13 +22,18 @@ def create_app():
     from app.routes.enrichment import enrichment_bp 
     from app.routes.agent_pipeline import agent_pipeline_bp
     from app.routes.lead_search import lead_search_bp
-    
+    from app.routes.tracking import tracking_bp
+    from app.routes.delivery_webhooks import delivery_webhooks_bp
+    from app.routes.campaigns import campaigns_bp
    
     app.register_blueprint(ingestion_bp, url_prefix="/api/v1/leads")
     app.register_blueprint(webhooks_bp, url_prefix="/api/v1/webhooks")
     app.register_blueprint(enrichment_bp, url_prefix="/api/v1")  
     app.register_blueprint(agent_pipeline_bp, url_prefix="/api/v1")
     app.register_blueprint(lead_search_bp, url_prefix="/api/v1")
+    app.register_blueprint(tracking_bp, url_prefix="/api/v1")
+    app.register_blueprint(delivery_webhooks_bp, url_prefix="/api/v1")
+    app.register_blueprint(campaigns_bp, url_prefix="/api/v1")
 
     @app.get("/health")
     def health():
