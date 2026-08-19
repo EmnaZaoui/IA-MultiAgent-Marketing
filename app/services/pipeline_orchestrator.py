@@ -11,6 +11,11 @@ from app.services.enrichment_service import enrich_lead
 from app.services.lead_search_service import discover_leads
 from app.agents.graph import marketing_agent_graph
 
+import time
+import random
+from app.services.campaign_service import _get_qualified_leads_for_sending, _send_single_email
+from app.models.email_send import EmailSend
+
 logger = logging.getLogger(__name__)
 
 SEARCH_TARGETS_PATH = "config/search_targets.json"
@@ -134,11 +139,51 @@ def _run_email_generation_phase(limit: int = 200) -> dict:
     return stats
 
 
-def _execute_full_pipeline(app, run_id: int):
+def _run_sending_phase(batch_size: int = 100, allow_production_send: bool = False) -> dict:
     """
-    Fonction exécutée dans un thread séparé (arrière-plan). Nécessite son
-    propre app_context Flask car elle tourne hors du cycle requête/réponse.
+    ÉTAPE 4: envoie les emails approuvés (statut DRAFTED) avec délais aléatoires
+    de protection de réputation. Respecte EMAIL_SEND_MODE (dry_run/sandbox/production).
     """
+    mode = os.getenv("EMAIL_SEND_MODE", "dry_run").lower()
+
+    if mode == "production" and not allow_production_send:
+        logger.warning(
+            "[SENDING] EMAIL_SEND_MODE=production mais allow_production_send=False. "
+            "Phase d'envoi ignorée par sécurité. Passez allow_production_send=True explicitement pour envoyer réellement."
+        )
+        return {"skipped": True, "reason": "production_send_not_explicitly_allowed", "sent": 0, "simulated": 0, "failed": 0, "suppressed": 0}
+
+    delay_min = int(os.getenv("DELIVERY_DELAY_MIN_SECONDS", 120))
+    delay_max = int(os.getenv("DELIVERY_DELAY_MAX_SECONDS", 420))
+
+    qualified = _get_qualified_leads_for_sending(batch_size)
+    stats = {"total_targeted": len(qualified), "sent": 0, "simulated": 0, "failed": 0, "suppressed": 0}
+
+    for index, (lead, draft) in enumerate(qualified, start=1):
+        logger.info(f"[SENDING] {index}/{len(qualified)}: {lead.contact_email} (mode={mode})")
+
+        email_send = _send_single_email(lead, draft)
+
+        if email_send.send_status == "SENT":
+            stats["sent"] += 1
+        elif email_send.send_status == "SIMULATED":
+            stats["simulated"] += 1
+        elif email_send.send_status == "SUPPRESSED":
+            stats["suppressed"] += 1
+        else:
+            stats["failed"] += 1
+
+        # Délai aléatoire entre chaque envoi, sauf en dry_run (rien n'est réellement
+        # envoyé donc pas besoin de protéger une réputation de domaine) et sauf
+        # après le dernier envoi de la liste.
+        if mode != "dry_run" and index < len(qualified):
+            delay = random.randint(delay_min, delay_max)
+            logger.info(f"[SENDING] Attente de {delay}s avant le prochain envoi...")
+            time.sleep(delay)
+
+    return stats
+
+def _execute_full_pipeline(app, run_id: int, allow_production_send: bool = False):
     with app.app_context():
         run = PipelineRun.query.get(run_id)
         try:
@@ -154,12 +199,17 @@ def _execute_full_pipeline(app, run_id: int):
             db.session.commit()
             email_stats = _run_email_generation_phase()
 
+            run.current_step = "SENDING"
+            db.session.commit()
+            sending_stats = _run_sending_phase(allow_production_send=allow_production_send)
+
             run.status = "COMPLETED"
             run.current_step = "DONE"
             run.stats = {
                 "discovery": discovery_stats,
                 "enrichment": enrichment_stats,
                 "email_generation": email_stats,
+                "sending": sending_stats,
             }
 
         except Exception as e:
@@ -173,17 +223,16 @@ def _execute_full_pipeline(app, run_id: int):
             db.session.commit()
 
 
-def start_full_pipeline_async(app, triggered_by: str = "MANUAL") -> PipelineRun:
-    """
-    Point d'entrée principal: crée un enregistrement PipelineRun, lance le
-    traitement complet (discovery -> enrichment -> email generation) dans un
-    thread d'arrière-plan, et retourne IMMÉDIATEMENT l'objet run (status=RUNNING).
-    """
+def start_full_pipeline_async(app, triggered_by: str = "MANUAL", allow_production_send: bool = False) -> PipelineRun:
     run = PipelineRun(status="RUNNING", triggered_by=triggered_by, current_step="STARTING")
     db.session.add(run)
     db.session.commit()
 
-    thread = threading.Thread(target=_execute_full_pipeline, args=(app, run.id), daemon=True)
+    thread = threading.Thread(
+        target=_execute_full_pipeline,
+        args=(app, run.id, allow_production_send),
+        daemon=True,
+    )
     thread.start()
 
     return run
