@@ -10,13 +10,16 @@ campaigns_bp = Blueprint("campaigns", __name__)
 @campaigns_bp.post("/campaigns/send-batch")
 def send_batch():
     body = request.get_json(silent=True) or {}
-    batch_size = min(int(body.get("batch_size", 100)), 100)  # plafond cahier des charges
+    batch_size = min(int(body.get("batch_size", 100)), 100)
 
     app = current_app._get_current_object()
-    run = start_batch_send_async(app, batch_size)
+    try:
+        run = start_batch_send_async(app, batch_size)
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 409
 
     return jsonify({
-        "message": f"Campagne d'envoi lancée en arrière-plan (jusqu'à {batch_size} prospects, délais 2-7min entre chaque envoi).",
+        "message": f"Campagne lancée (jusqu'à {batch_size} prospects).",
         "campaign_run": run.to_dict(),
     }), 202
 

@@ -147,10 +147,14 @@ def _execute_batch_send(app, run_id: int, batch_size: int):
             db.session.commit()
 
 
+def is_campaign_already_running() -> bool:
+    active = CampaignRun.query.filter_by(status="RUNNING").first()
+    return active is not None
+
 def start_batch_send_async(app, batch_size: int = 100) -> CampaignRun:
-    """Point d'entrée: lance l'envoi par lots en arrière-plan avec délais
-    aléatoires, conformément à 'production test batch of 100 qualified
-    prospects and randomized delivery delays (2 to 7 minutes)'."""
+    if is_campaign_already_running():
+        raise RuntimeError("Une campagne d'envoi est déjà en cours. Attendez sa fin avant d'en lancer une nouvelle.")
+
     run = CampaignRun(status="RUNNING")
     db.session.add(run)
     db.session.commit()

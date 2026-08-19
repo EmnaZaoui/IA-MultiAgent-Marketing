@@ -110,15 +110,14 @@ def run_pipeline():
     allow_production_send = bool(body.get("allow_production_send", False))
 
     app = current_app._get_current_object()
-    run = start_full_pipeline_async(app, triggered_by="MANUAL", allow_production_send=allow_production_send)
+    try:
+        run = start_full_pipeline_async(app, triggered_by="MANUAL", allow_production_send=allow_production_send)
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 409
 
     current_mode = os.getenv("EMAIL_SEND_MODE", "dry_run")
-
     return jsonify({
-        "message": (
-            f"Pipeline complet lancé en arrière-plan (Discovery -> Enrichment -> "
-            f"Email Generation -> Sending). Mode d'envoi actif: '{current_mode}'."
-        ),
+        "message": f"Pipeline complet lancé. Mode d'envoi actif: '{current_mode}'.",
         "run": run.to_dict(),
     }), 202
 
