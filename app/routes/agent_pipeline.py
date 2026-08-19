@@ -98,6 +98,7 @@ from app.models.email_draft import EmailDraft
 from app.models.pipeline_run import PipelineRun
 from app.agents.graph import marketing_agent_graph
 from app.services.pipeline_orchestrator import start_full_pipeline_async
+from flask import Blueprint, jsonify, request, current_app
 
 agent_pipeline_bp = Blueprint("agent_pipeline", __name__)
 
@@ -105,13 +106,21 @@ agent_pipeline_bp = Blueprint("agent_pipeline", __name__)
 
 @agent_pipeline_bp.post("/pipeline/run")
 def run_pipeline():
+    body = request.get_json(silent=True) or {}
+    allow_production_send = bool(body.get("allow_production_send", False))
+
     app = current_app._get_current_object()
-    run = start_full_pipeline_async(app, triggered_by="MANUAL")
+    run = start_full_pipeline_async(app, triggered_by="MANUAL", allow_production_send=allow_production_send)
+
+    current_mode = os.getenv("EMAIL_SEND_MODE", "dry_run")
+
     return jsonify({
-        "message": "Pipeline lancé en arrière-plan. Consultez /pipeline/run/<id> pour suivre la progression.",
+        "message": (
+            f"Pipeline complet lancé en arrière-plan (Discovery -> Enrichment -> "
+            f"Email Generation -> Sending). Mode d'envoi actif: '{current_mode}'."
+        ),
         "run": run.to_dict(),
     }), 202
-
 
 @agent_pipeline_bp.get("/pipeline/run/<int:run_id>")
 def get_pipeline_run(run_id):
