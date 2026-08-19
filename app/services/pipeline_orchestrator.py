@@ -223,7 +223,16 @@ def _execute_full_pipeline(app, run_id: int, allow_production_send: bool = False
             db.session.commit()
 
 
+def is_pipeline_already_running() -> bool:
+    """Verrou anti-double-run: empêche de lancer un nouveau cycle complet
+    tant qu'un précédent est encore en cours d'exécution."""
+    active_run = PipelineRun.query.filter_by(status="RUNNING").first()
+    return active_run is not None
+
 def start_full_pipeline_async(app, triggered_by: str = "MANUAL", allow_production_send: bool = False) -> PipelineRun:
+    if is_pipeline_already_running():
+        raise RuntimeError("Un pipeline est déjà en cours d'exécution. Attendez sa fin avant d'en lancer un nouveau.")
+
     run = PipelineRun(status="RUNNING", triggered_by=triggered_by, current_step="STARTING")
     db.session.add(run)
     db.session.commit()
