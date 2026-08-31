@@ -1,0 +1,15 @@
+{
+  "excluded_domains": [
+    "tripadvisor.", "thefork.", "opentable.", "resy.com",
+    "booking.com", "agoda.com", "expedia.", "hotels.com",
+    "kayak.com", "trivago.", "viamichelin.", "zomato.com", "yelp.com",
+    "marriott.com", "hilton.com", "conradhotels", "ihg.com",
+    "accor.com", "hyatt.com", "radissonhotels.com", "minorhotels.com",
+    "anantara.com", "wmaldives.com",
+    "facebook.com", "instagram.com", "youtube.com", "twitter.com",
+    "x.com", "linkedin.com", "tiktok.com", "pinterest.",
+    "wikipedia.org", "timeout.com", "lonelyplanet.com",
+    "tripsavvy.com", "cntraveler.com", "routard.com",
+    "voyage-", "marhba.com"
+  ]
+}

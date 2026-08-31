@@ -17,3 +17,7 @@ chromadb>=1.0.0
 
 sentence-transformers==3.2.1
 ddgs==9.0.2
+
+flask-cors==5.0.0
+flasgger==0.9.7.1
+flask-swagger-ui==4.11.1

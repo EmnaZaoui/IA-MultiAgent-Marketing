@@ -4,6 +4,8 @@ from config import Config
 from app.extensions import db
 from app.utils.logger import setup_logger
 
+from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint  
 
 
 def create_app():
@@ -16,7 +18,18 @@ def create_app():
     db.init_app(app)
     setup_logger(app)
 
+    # CORS pour Angular
+    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:4200"]}})
+
     
+    SWAGGER_URL = "/api/docs"
+    OPENAPI_SPEC_URL = "/static/openapi.json"
+    swaggerui_bp = get_swaggerui_blueprint(
+        SWAGGER_URL, OPENAPI_SPEC_URL, config={"app_name": "AI Multi-Agent Marketing — Fastriom"}
+    )
+    app.register_blueprint(swaggerui_bp, url_prefix=SWAGGER_URL)
+
+    # Importer les blueprints
     from app.routes.ingestion import ingestion_bp
     from app.routes.webhooks import webhooks_bp
     from app.routes.enrichment import enrichment_bp 
@@ -25,7 +38,8 @@ def create_app():
     from app.routes.tracking import tracking_bp
     from app.routes.delivery_webhooks import delivery_webhooks_bp
     from app.routes.campaigns import campaigns_bp
-   
+
+    # Enregistrer les blueprints
     app.register_blueprint(ingestion_bp, url_prefix="/api/v1/leads")
     app.register_blueprint(webhooks_bp, url_prefix="/api/v1/webhooks")
     app.register_blueprint(enrichment_bp, url_prefix="/api/v1")  

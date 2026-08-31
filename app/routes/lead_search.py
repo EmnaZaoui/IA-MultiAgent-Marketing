@@ -9,10 +9,11 @@ def discover():
     body = request.get_json(silent=True) or {}
     query = body.get("query")
     business_type_hint = body.get("business_type_hint", "")
-    max_results = min(int(body.get("max_results", 10)), 30)  # plafond pour rester raisonnable
+    max_results = min(int(body.get("max_results", 10)), 50) 
 
     if not query:
         return jsonify({"error": "Champ 'query' requis, ex: 'restaurants Tunis'"}), 400
 
     result = discover_leads(query, business_type_hint, max_results)
     return jsonify(result), 200
+

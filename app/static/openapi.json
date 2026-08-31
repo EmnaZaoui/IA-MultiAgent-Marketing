@@ -1,0 +1,200 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AI Multi-Agent Marketing API — Fastriom",
+    "version": "1.0.0",
+    "description": "API du pipeline multi-agent de prospection B2B pour Fastriom (CHR & Retail)."
+  },
+  "servers": [{ "url": "http://localhost:5000/api/v1" }],
+  "tags": [
+    { "name": "Leads", "description": "Gestion et import des leads" },
+    { "name": "Enrichment", "description": "Enrichissement via scraping + RAG" },
+    { "name": "Agents", "description": "Génération d'emails via agents LangGraph" },
+    { "name": "Pipeline", "description": "Orchestration du cycle complet" },
+    { "name": "Campaigns", "description": "Envoi d'emails et suivi de campagne" },
+    { "name": "Tracking", "description": "Pixels/liens de tracking de déliverabilité" },
+    { "name": "Webhooks", "description": "Réception d'événements externes" }
+  ],
+  "paths": {
+    "/leads": {
+      "get": {
+        "tags": ["Leads"],
+        "summary": "Liste paginée des leads avec filtres",
+        "parameters": [
+          { "name": "status", "in": "query", "schema": { "type": "string" } },
+          { "name": "sector", "in": "query", "schema": { "type": "string" } },
+          { "name": "source", "in": "query", "schema": { "type": "string" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "Liste des leads" } }
+      }
+    },
+    "/leads/{lead_id}": {
+      "get": {
+        "tags": ["Leads"],
+        "summary": "Détail d'un lead",
+        "parameters": [{ "name": "lead_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Détail du lead" }, "404": { "description": "Introuvable" } }
+      }
+    },
+    "/leads/import-csv": {
+      "post": {
+        "tags": ["Leads"],
+        "summary": "Import en masse de leads via fichier CSV",
+        "requestBody": { "content": { "multipart/form-data": { "schema": { "type": "object", "properties": { "file": { "type": "string", "format": "binary" } } } } } },
+        "responses": { "201": { "description": "Résumé de l'import" } }
+      }
+    },
+    "/leads/discover": {
+      "post": {
+        "tags": ["Leads"],
+        "summary": "Recherche automatique de leads (agent Prospector)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string", "example": "restaurants Tunis" },
+                  "business_type_hint": { "type": "string", "example": "restaurant" },
+                  "max_results": { "type": "integer", "example": 10 }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Résultats de la recherche" } }
+      }
+    },
+    "/webhooks/lead-intake": {
+      "post": {
+        "tags": ["Webhooks"],
+        "summary": "Réception d'un lead via webhook externe",
+        "parameters": [{ "name": "X-Webhook-Token", "in": "header", "required": true, "schema": { "type": "string" } }],
+        "responses": { "201": { "description": "Lead créé" }, "401": { "description": "Token invalide" } }
+      }
+    },
+    "/leads/{lead_id}/enrich": {
+      "post": {
+        "tags": ["Enrichment"],
+        "summary": "Enrichit un lead via scraping de son site web",
+        "parameters": [{ "name": "lead_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Résultat de l'enrichissement" } }
+      }
+    },
+    "/knowledge-base/search": {
+      "get": {
+        "tags": ["Enrichment"],
+        "summary": "Recherche sémantique dans la base de connaissances Fastriom (RAG)",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "k", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "Résultats RAG" } }
+      }
+    },
+    "/leads/{lead_id}/generate-email": {
+      "post": {
+        "tags": ["Agents"],
+        "summary": "Génère un email personnalisé via le pipeline LangGraph (Researcher/Strategist/Copywriter/Compliance)",
+        "parameters": [{ "name": "lead_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "201": { "description": "Draft d'email créé" }, "409": { "description": "Lead pas encore ENRICHED" } }
+      }
+    },
+    "/leads/{lead_id}/email-drafts": {
+      "get": {
+        "tags": ["Agents"],
+        "summary": "Historique des brouillons d'email générés pour un lead",
+        "parameters": [{ "name": "lead_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Liste des drafts" } }
+      }
+    },
+    "/pipeline/run": {
+      "post": {
+        "tags": ["Pipeline"],
+        "summary": "Lance le cycle complet (Discovery -> Enrichment -> Email Generation -> Sending) en arrière-plan",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "allow_production_send": { "type": "boolean" } } } } }
+        },
+        "responses": { "202": { "description": "Pipeline lancé" }, "409": { "description": "Un pipeline est déjà en cours" } }
+      }
+    },
+    "/pipeline/run/{run_id}": {
+      "get": {
+        "tags": ["Pipeline"],
+        "summary": "Statut et résultats d'un run de pipeline",
+        "parameters": [{ "name": "run_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Détail du run" } }
+      }
+    },
+    "/pipeline/runs": {
+      "get": {
+        "tags": ["Pipeline"],
+        "summary": "Historique des 20 derniers runs de pipeline",
+        "responses": { "200": { "description": "Liste des runs" } }
+      }
+    },
+    "/campaigns/send-batch": {
+      "post": {
+        "tags": ["Campaigns"],
+        "summary": "Envoie un lot d'emails (jusqu'à 100) avec délais aléatoires 2-7 min",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "batch_size": { "type": "integer", "example": 100 } } } } }
+        },
+        "responses": { "202": { "description": "Campagne lancée" }, "409": { "description": "Une campagne est déjà en cours" } }
+      }
+    },
+    "/campaigns/{run_id}": {
+      "get": {
+        "tags": ["Campaigns"],
+        "summary": "Statut d'une campagne d'envoi",
+        "parameters": [{ "name": "run_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Détail de la campagne" } }
+      }
+    },
+    "/leads/{lead_id}/email-sends": {
+      "get": {
+        "tags": ["Campaigns"],
+        "summary": "Historique des envois pour un lead",
+        "parameters": [{ "name": "lead_id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Liste des envois" } }
+      }
+    },
+    "/track/open/{token}.png": {
+      "get": {
+        "tags": ["Tracking"],
+        "summary": "Pixel invisible de tracking d'ouverture d'email",
+        "parameters": [{ "name": "token", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Image PNG 1x1" } }
+      }
+    },
+    "/track/click/{token}": {
+      "get": {
+        "tags": ["Tracking"],
+        "summary": "Tracking de clic puis redirection",
+        "parameters": [{ "name": "token", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "302": { "description": "Redirection" } }
+      }
+    },
+    "/track/unsubscribe/{token}": {
+      "get": {
+        "tags": ["Tracking"],
+        "summary": "Désabonnement + ajout à la liste de suppression",
+        "parameters": [{ "name": "token", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Confirmation de désabonnement" } }
+      }
+    },
+    "/webhooks/bounce": {
+      "post": {
+        "tags": ["Webhooks"],
+        "summary": "Réception d'une notification de bounce asynchrone",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "email": { "type": "string" }, "reason": { "type": "string" } } } } }
+        },
+        "responses": { "200": { "description": "Bounce enregistré" } }
+      }
+    }
+  }
+}

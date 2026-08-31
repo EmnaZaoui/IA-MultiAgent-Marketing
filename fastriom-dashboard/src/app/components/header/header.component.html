@@ -1,0 +1,20 @@
+<header class="topbar">
+  <div class="topbar-left">
+    <img src="assets/logo-tocodepro.png" alt="TocodePro" class="logo-tocodepro" onerror="this.style.display='none'" />
+    <div class="brand-fallback">TocodePro</div>
+  </div>
+
+  <nav class="topbar-nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+    <a routerLink="/recherche" routerLinkActive="active">Recherche de leads</a>
+    <a routerLink="/leads" routerLinkActive="active">Leads</a>
+    <a routerLink="/pipeline" routerLinkActive="active">Pipeline</a>
+    <a routerLink="/a-propos" routerLinkActive="active">À propos</a>
+  </nav>
+
+  <div class="topbar-right">
+    <button class="btn-outline" (click)="openSwagger()">📄 API Docs (Swagger)</button>
+    <img src="assets/logo-fastriom.png" alt="Fastriom" class="logo-fastriom" onerror="this.style.display='none'" />
+    <div class="brand-fallback-fastriom">FASTRIOM</div>
+  </div>
+</header>

@@ -1,19 +1,21 @@
 import os
 import csv
 import json
+import logging
 from datetime import datetime
-
-from ddgs import DDGS
 
 from app.extensions import db
 from app.models.lead import Lead
 from app.services.scraper_service import WebsiteScraper
 from app.services.lead_service import validate_lead_payload, email_already_exists, create_lead
+from app.services.search_provider import search_web
 from app.agents.llm_client import call_llm_json, LLMError
 from app.agents.prospecting_prompts import PROSPECTOR_EXTRACTION_PROMPT
-import time
-import logging
-from app.services.search_provider import search_web
+
+logger = logging.getLogger(__name__)
+
+EXPORTS_DIR = "data/exports"
+MAX_SEARCH_RESULTS_DEFAULT = 10
 
 EXCLUDED_DOMAINS = [
     "tripadvisor.", "thefork.", "facebook.com", "instagram.com",
@@ -23,46 +25,14 @@ EXCLUDED_DOMAINS = [
 
 
 def _is_excluded_domain(url: str) -> bool:
-    """Filtre les plateformes tierces qui ne sont jamais de vrais sites
-    d'entreprise exploitables (annuaires, réseaux sociaux, avis clients)."""
     url_lower = url.lower()
     return any(domain in url_lower for domain in EXCLUDED_DOMAINS)
 
-EXPORTS_DIR = "data/exports"
-MAX_SEARCH_RESULTS_DEFAULT = 50
-
-
-
 
 def _search_candidate_websites(query: str, max_results: int) -> list:
+    """Recherche des sites web candidats via le fournisseur configuré (Serper/DuckDuckGo)."""
     return search_web(query, max_results)
 
-"""
-logger = logging.getLogger(__name__)
-
-def _search_candidate_websites(query: str, max_results: int) -> list:
-    
-    results = []
-    try:
-        with DDGS() as ddgs:
-            raw_hits = list(ddgs.text(query, region="fr-fr", max_results=max_results))
-            logger.info(f"DuckDuckGo a retourné {len(raw_hits)} résultat(s) bruts pour '{query}'")
-
-            for hit in raw_hits:
-                url = hit.get("href") or hit.get("url")
-                if url:
-                    results.append({"title": hit.get("title", ""), "url": url})
-
-    except Exception as e:
-        logger.error(f"Erreur DuckDuckGo pour la requête '{query}': {str(e)}")
-        # On ne relance pas l'exception : on retourne une liste vide + on log,
-        # pour que le reste du pipeline ne plante pas juste parce que la
-        # recherche a été bloquée temporairement.
-
-    time.sleep(2)  # anti rate-limiting basique entre deux recherches
-    return results
-
-    """
 
 def _extract_lead_info(scrape_result: dict, business_type_hint: str) -> dict | None:
     """Utilise le LLM pour qualifier et structurer les infos du prospect candidat."""
@@ -79,7 +49,8 @@ def _extract_lead_info(scrape_result: dict, business_type_hint: str) -> dict | N
 
     try:
         return call_llm_json(PROSPECTOR_EXTRACTION_PROMPT, user_prompt, temperature=0.2)
-    except LLMError:
+    except LLMError as e:
+        logger.error(f"Erreur extraction LLM pour '{scrape_result.get('url')}': {str(e)}")
         return None
 
 
@@ -109,17 +80,23 @@ def _export_session_log(session_results: list, query: str) -> dict:
 def discover_leads(query: str, business_type_hint: str = "", max_results: int = MAX_SEARCH_RESULTS_DEFAULT) -> dict:
     """
     Pipeline complet de prospection autonome:
-    recherche web -> scraping -> extraction LLM -> validation -> stockage PostgreSQL
-    + export CSV/JSON du log complet de la session.
+    recherche web -> filtrage plateformes sociales -> scraping -> extraction LLM
+    -> validation -> stockage PostgreSQL + export CSV/JSON du log complet.
     """
     scraper = WebsiteScraper()
-    candidates = _search_candidate_websites(query, max_results)
-    filtered_candidates = [c for c in candidates if not _is_excluded_domain(c["url"])]
-    excluded_count = len(candidates) - len(filtered_candidates)
-    candidates = filtered_candidates
+    raw_candidates = _search_candidate_websites(query, max_results)
+    candidates = [c for c in raw_candidates if not _is_excluded_domain(c["url"])]
 
     session_results = []
-    stats = {"searched": len(candidates), "created": 0, "duplicates": 0, "irrelevant": 0, "no_email": 0, "errors": 0, "excluded_platforms": excluded_count}
+    stats = {
+        "searched": len(candidates),
+        "excluded_platforms": len(raw_candidates) - len(candidates),
+        "created": 0,
+        "duplicates": 0,
+        "irrelevant": 0,
+        "no_email": 0,
+        "errors": 0,
+    }
 
     for candidate in candidates:
         row = {"url": candidate["url"], "title": candidate["title"], "outcome": None}
@@ -145,6 +122,7 @@ def discover_leads(query: str, business_type_hint: str = "", max_results: int = 
             row["outcome"] = "NO_EMAIL_FOUND"
             row["company_name"] = extracted.get("company_name")
             row["sector"] = extracted.get("sector")
+            row["reasoning"] = extracted.get("reasoning")
             stats["no_email"] += 1
             session_results.append(row)
             continue
