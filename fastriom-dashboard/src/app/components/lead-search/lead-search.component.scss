@@ -1,0 +1,36 @@
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.form-group { flex: 1; min-width: 200px; }
+.form-group-small { flex: 0 0 140px; }
+
+.error-text { color: var(--color-danger); font-size: 13px; margin-top: 10px; }
+
+.result-card { margin-top: 24px; }
+
+.stats-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  th, td { text-align: left; padding: 10px; font-size: 13px; border-bottom: 1px solid var(--color-border); }
+  th { color: var(--color-text-muted); font-size: 11px; text-transform: uppercase; }
+  a { color: var(--color-primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
+
+.reasoning-cell {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  max-width: 320px;
+}

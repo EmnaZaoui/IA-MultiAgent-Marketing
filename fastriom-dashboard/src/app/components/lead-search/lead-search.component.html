@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h1>Recherche automatique de leads</h1>
+  <p>L'agent Prospector recherche, scrape et qualifie des prospects B2B en temps réel.</p>
+</div>
+
+<div class="card">
+  <div class="form-row">
+    <div class="form-group">
+      <label>Requête de recherche</label>
+      <input type="text" [(ngModel)]="query" placeholder="ex: restaurants Maldives" (keyup.enter)="search()" />
+    </div>
+    <div class="form-group">
+      <label>Type d'activité (indice)</label>
+      <input type="text" [(ngModel)]="businessTypeHint" placeholder="ex: restaurant" />
+    </div>
+    <div class="form-group form-group-small">
+      <label>Nombre max de résultats</label>
+      <input type="number" [(ngModel)]="maxResults" min="1" max="30" />
+    </div>
+  </div>
+
+  <button class="btn-primary" (click)="search()" [disabled]="loading">
+    {{ loading ? '⏳ Recherche en cours...' : '🔍 Lancer la recherche' }}
+  </button>
+
+  <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>
+
+<div class="card result-card" *ngIf="result">
+  <h3>Résultats pour « {{ result.query }} »</h3>
+
+  <div class="stats-inline">
+    <span class="badge badge-info">{{ result.stats.searched }} recherché(s)</span>
+    <span class="badge badge-success">{{ result.stats.created }} créé(s)</span>
+    <span class="badge badge-neutral">{{ result.stats.duplicates }} doublon(s)</span>
+    <span class="badge badge-warning">{{ result.stats.no_email }} sans email</span>
+    <span class="badge badge-neutral">{{ result.stats.irrelevant }} non pertinent(s)</span>
+    <span class="badge badge-danger">{{ result.stats.errors }} erreur(s)</span>
+  </div>
+
+  <table class="mini-table" *ngIf="result.details?.length">
+    <thead><tr><th>Titre</th><th>Résultat</th><th>Entreprise</th><th>Justification</th></tr></thead>
+    <tbody>
+       <tr *ngFor="let row of result.details">
+        <td><a [href]="row.url" target="_blank">{{ row.title || row.url }}</a></td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'badge-success': row.outcome === 'CREATED',
+            'badge-warning': row.outcome === 'NO_EMAIL_FOUND',
+            'badge-danger': row.outcome === 'SCRAPE_FAILED' || row.outcome === 'ERRORS',
+            'badge-neutral': row.outcome === 'IRRELEVANT' || row.outcome === 'DUPLICATE'
+          }">{{ row.outcome }}</span>
+        </td>
+        <td>{{ row.company_name || '—' }}</td>
+        <td class="reasoning-cell">{{ row.reasoning || row.error || '—' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

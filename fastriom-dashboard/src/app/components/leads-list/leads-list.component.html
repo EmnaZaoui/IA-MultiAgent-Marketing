@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1>Leads</h1>
+  <p>Liste complète des prospects, avec actions individuelles disponibles par ligne.</p>
+</div>
+
+<div class="card filters-card">
+  <div class="form-row">
+    <div class="form-group">
+      <label>Statut</label>
+      <select [(ngModel)]="filterStatus" (change)="loadLeads()">
+        <option value="">Tous</option>
+        <option value="LEAD_IMPORTED">LEAD_IMPORTED</option>
+        <option value="ENRICHED">ENRICHED</option>
+        <option value="DRAFTED">DRAFTED</option>
+        <option value="SENT">SENT</option>
+        <option value="FAILED">FAILED</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Secteur</label>
+      <select [(ngModel)]="filterSector" (change)="loadLeads()">
+        <option value="">Tous</option>
+        <option value="CHR">CHR</option>
+        <option value="RETAIL">RETAIL</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Source</label>
+      <select [(ngModel)]="filterSource" (change)="loadLeads()">
+        <option value="">Toutes</option>
+        <option value="CSV_IMPORT">CSV_IMPORT</option>
+        <option value="WEBHOOK">WEBHOOK</option>
+        <option value="AGENT_SEARCH">AGENT_SEARCH</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <table class="leads-table" *ngIf="!loading; else loadingTpl">
+    <thead>
+      <tr>
+        <th>Entreprise</th><th>Email</th><th>Secteur</th><th>Statut</th><th>Source</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lead of leads">
+        <td>{{ lead.company_name }}</td>
+        <td>{{ lead.contact_email }}</td>
+        <td>{{ lead.sector }}</td>
+        <td><span class="badge" [ngClass]="statusBadgeClass(lead.status)">{{ lead.status }}</span></td>
+        <td>{{ lead.source }}</td>
+        <td class="actions-cell">
+          <button class="btn-outline btn-sm" (click)="enrich(lead.id)"
+                  [disabled]="actionInProgress[lead.id] === 'enrich' || lead.status !== 'LEAD_IMPORTED'">
+            {{ actionInProgress[lead.id] === 'enrich' ? '⏳' : '🌐 Enrichir' }}
+          </button>
+          <button class="btn-outline btn-sm" (click)="generateEmail(lead.id)"
+                  [disabled]="actionInProgress[lead.id] === 'email' || lead.status !== 'ENRICHED'">
+            {{ actionInProgress[lead.id] === 'email' ? '⏳' : '✉️ Générer email' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #loadingTpl><p class="muted">Chargement...</p></ng-template>
+</div>

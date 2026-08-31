@@ -15,15 +15,18 @@ import time
 import random
 from app.services.campaign_service import _get_qualified_leads_for_sending, _send_single_email
 from app.models.email_send import EmailSend
+from app.services.icp_targeting_service import get_next_target_batch
+
 
 logger = logging.getLogger(__name__)
 
 SEARCH_TARGETS_PATH = "config/search_targets.json"
 
-
 def _load_search_targets() -> dict:
     with open(SEARCH_TARGETS_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
 
 
 def _run_discovery_phase() -> dict:

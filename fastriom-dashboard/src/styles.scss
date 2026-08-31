@@ -1,0 +1,112 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-primary: #1a3c6e;      /* Bleu foncé - à remplacer par la couleur principale du logo TocodePro */
+  --color-primary-light: #2c5aa0;
+  --color-accent: #f2994a;       /* Orange - à remplacer par la couleur d'accent du logo */
+  --color-bg: #ffffff;           /* Fond blanc, comme demandé */
+  --color-bg-soft: #f7f9fc;
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-border: #e5e7eb;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+
+  &:hover { background-color: var(--color-primary-light); }
+  &:disabled { background-color: #cbd5e1; cursor: not-allowed; }
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+
+  &:hover { filter: brightness(1.08); }
+  &:disabled { background-color: #cbd5e1; cursor: not-allowed; }
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  padding: 9px 18px;
+  font-weight: 600;
+  font-size: 14px;
+
+  &:hover { background-color: var(--color-bg-soft); }
+}
+
+.card {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+input, select, textarea {
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary-light);
+  }
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.badge-success { background-color: #dcfce7; color: #166534; }
+  &.badge-warning { background-color: #fef3c7; color: #92400e; }
+  &.badge-danger  { background-color: #fee2e2; color: #991b1b; }
+  &.badge-neutral { background-color: #e5e7eb; color: #374151; }
+  &.badge-info    { background-color: #dbeafe; color: #1e40af; }
+}

@@ -5,7 +5,48 @@
     {"query": "boulangeries Sfax", "business_type_hint": "boulangerie"},
     {"query": "boutiques vetements Tunis", "business_type_hint": "boutique_vetements"},
     {"query": "restaurants Sousse", "business_type_hint": "restaurant"},
-    {"query": "epiceries fines Tunis", "business_type_hint": "epicerie_fine"}
+    {"query": "epiceries fines Tunis", "business_type_hint": "epicerie_fine"},
+
+    {"query": "restaurants Paris", "business_type_hint": "restaurant"},
+    {"query": "boulangeries Lyon", "business_type_hint": "boulangerie"},
+    {"query": "boutiques vetements Marseille", "business_type_hint": "boutique_vetements"},
+    {"query": "cafes Bordeaux", "business_type_hint": "cafe"},
+
+    {"query": "restaurants Casablanca", "business_type_hint": "restaurant"},
+    {"query": "boutiques Marrakech", "business_type_hint": "boutique_vetements"},
+    {"query": "cafes Rabat", "business_type_hint": "cafe"},
+
+    {"query": "restaurants Alger", "business_type_hint": "restaurant"},
+    {"query": "boulangeries Oran", "business_type_hint": "boulangerie"},
+
+    {"query": "restaurants Le Caire", "business_type_hint": "restaurant"},
+    {"query": "cafes Alexandrie", "business_type_hint": "cafe"},
+
+    {"query": "restaurants Dubai", "business_type_hint": "restaurant"},
+    {"query": "boutiques Abu Dhabi", "business_type_hint": "boutique_vetements"},
+
+    {"query": "restaurants Beyrouth", "business_type_hint": "restaurant"},
+
+    {"query": "restaurants Bruxelles", "business_type_hint": "restaurant"},
+    {"query": "cafes Geneve", "business_type_hint": "cafe"},
+    {"query": "boutiques Montreal", "business_type_hint": "boutique_vetements"},
+
+    {"query": "restaurants Dakar", "business_type_hint": "restaurant"},
+    {"query": "restaurants Abidjan", "business_type_hint": "restaurant"},
+
+    {"query": "restaurants Londres", "business_type_hint": "restaurant"},
+    {"query": "restaurants Madrid", "business_type_hint": "restaurant"},
+    {"query": "boutiques Barcelone", "business_type_hint": "boutique_vetements"},
+    {"query": "restaurants Rome", "business_type_hint": "restaurant"},
+    {"query": "boutiques Milan", "business_type_hint": "boutique_vetements"},
+    {"query": "restaurants Lisbonne", "business_type_hint": "restaurant"},
+
+    {"query": "restaurants New York", "business_type_hint": "restaurant"},
+    {"query": "restaurants Miami", "business_type_hint": "restaurant"},
+    {"query": "restaurants Toronto", "business_type_hint": "restaurant"},
+
+    {"query": "restaurants Singapour", "business_type_hint": "restaurant"},
+    {"query": "restaurants Bangkok", "business_type_hint": "restaurant"}
   ],
   "max_results_per_target": 8
 }

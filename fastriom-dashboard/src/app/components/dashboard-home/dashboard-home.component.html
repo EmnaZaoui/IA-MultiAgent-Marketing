@@ -1,0 +1,55 @@
+<div class="page-header">
+  <h1>Tableau de bord</h1>
+  <p>Vue d'ensemble du système multi-agent de prospection Fastriom</p>
+</div>
+
+<div class="stats-grid" *ngIf="!loading">
+  <div class="card stat-card">
+    <div class="stat-value">{{ totalLeads }}</div>
+    <div class="stat-label">Leads au total</div>
+  </div>
+
+  <div class="card stat-card" *ngFor="let key of statusKeys()">
+    <div class="stat-value">{{ leadsByStatus[key] }}</div>
+    <div class="stat-label">{{ key }}</div>
+  </div>
+</div>
+
+<div class="card" *ngIf="!loading" style="margin-top: 24px;">
+  <h3>Répartition par secteur</h3>
+  <div class="sector-bars">
+    <div class="sector-row" *ngFor="let key of sectorKeys()">
+      <span class="sector-name">{{ key }}</span>
+      <span class="badge badge-info">{{ leadsBySector[key] }} lead(s)</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 24px;">
+  <h3>Derniers cycles de pipeline</h3>
+  <table class="mini-table" *ngIf="recentRuns.length > 0; else noRuns">
+    <thead>
+      <tr><th>ID</th><th>Statut</th><th>Étape</th><th>Démarré</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let run of recentRuns">
+        <td>#{{ run.id }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'badge-success': run.status === 'COMPLETED',
+            'badge-warning': run.status === 'RUNNING',
+            'badge-danger': run.status === 'FAILED'
+          }">{{ run.status }}</span>
+        </td>
+        <td>{{ run.current_step }}</td>
+        <td>{{ run.started_at | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noRuns><p class="muted">Aucun pipeline lancé pour le moment.</p></ng-template>
+</div>
+
+<div class="quick-actions">
+  <a routerLink="/recherche" class="btn-primary action-link">🔍 Rechercher des leads</a>
+  <a routerLink="/pipeline" class="btn-accent action-link">⚡ Lancer le pipeline complet</a>
+</div>
