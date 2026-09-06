@@ -7,11 +7,11 @@
   <div class="card">
     <h3>⚡ Pipeline complet</h3>
     <p class="muted">Recherche → Enrichissement → Génération d'emails → Envoi, tout automatiquement.</p>
-    <button class="btn-accent" (click)="runFullPipeline()" [disabled]="loadingPipeline">
-      {{ loadingPipeline ? '⏳ Lancement...' : '⚡ Lancer le pipeline complet' }}
+    <button class="btn-accent" (click)="runFullPipeline()" [disabled]="busy$ | async">
+      {{ (busy$ | async) ? '⏳ Traitement en cours...' : '⚡ Lancer le pipeline complet' }}
     </button>
 
-    <div class="run-status" *ngIf="currentRun">
+    <div class="run-status" *ngIf="pipelineRun$ | async as currentRun">
       <div class="status-row">
         <span>Run #{{ currentRun.id }}</span>
         <span class="badge" [ngClass]="{
@@ -35,17 +35,21 @@
 
     <div class="form-group">
       <label>Taille du lot (max 100)</label>
-      <input type="number" [(ngModel)]="batchSize" min="1" max="100" />
+      <input type="number" [(ngModel)]="batchSize" min="1" max="100" [disabled]="(busy$ | async) === true" />
     </div>
 
-    <button class="btn-primary" (click)="runCampaignOnly()" [disabled]="loadingCampaign">
-      {{ loadingCampaign ? '⏳ Lancement...' : '📤 Lancer l\'envoi' }}
+    <button class="btn-primary" (click)="runCampaignOnly()" [disabled]="(busy$ | async) === true">
+      {{ (busy$ | async) ? '⏳ Traitement en cours...' : "📤 Lancer l'envoi" }}
     </button>
 
-    <div class="run-status" *ngIf="currentCampaign">
+    <div class="run-status" *ngIf="campaignRun$ | async as currentCampaign">
       <div class="status-row">
         <span>Campagne #{{ currentCampaign.id }}</span>
-        <span class="badge badge-warning">{{ currentCampaign.status }}</span>
+        <span class="badge" [ngClass]="{
+          'badge-success': currentCampaign.status === 'COMPLETED',
+          'badge-warning': currentCampaign.status === 'RUNNING',
+          'badge-danger': currentCampaign.status === 'FAILED'
+        }">{{ currentCampaign.status }}</span>
       </div>
     </div>
   </div>

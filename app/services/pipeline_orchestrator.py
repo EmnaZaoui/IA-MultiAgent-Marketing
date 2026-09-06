@@ -15,7 +15,7 @@ import time
 import random
 from app.services.campaign_service import _get_qualified_leads_for_sending, _send_single_email
 from app.models.email_send import EmailSend
-from app.services.icp_targeting_service import get_next_target_batch
+
 
 
 logger = logging.getLogger(__name__)

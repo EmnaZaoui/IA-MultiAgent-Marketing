@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h1>Cibles de recherche (ICP)</h1>
+  <p>Gérez les requêtes utilisées par l'agent Prospector lors de la découverte automatique de leads.</p>
+</div>
+
+<div class="card settings-card">
+  <label>Nombre maximum de résultats par cible</label>
+  <div class="settings-row">
+    <input type="number" [(ngModel)]="maxResultsPerTarget" min="1" max="30" />
+    <button class="btn-outline" (click)="saveMaxResults()">Enregistrer</button>
+  </div>
+</div>
+
+<p class="success-text" *ngIf="successMessage">{{ successMessage }}</p>
+<p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<div class="card">
+  <div class="table-header-row">
+    <h3>Liste des cibles ({{ targets.length }})</h3>
+    <button class="btn-primary" (click)="openAddForm()">+ Ajouter une cible</button>
+  </div>
+
+  <table class="targets-table" *ngIf="!loading; else loadingTpl">
+    <thead>
+      <tr><th>Requête</th><th>Type d'activité</th><th class="actions-col">Actions</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let target of targets">
+        <td>{{ target.query }}</td>
+        <td>{{ target.business_type_hint || '—' }}</td>
+        <td class="actions-cell">
+          <button class="icon-btn" title="Modifier" (click)="openEditForm(target)">✏️</button>
+          <button class="icon-btn icon-btn-danger" title="Supprimer" (click)="confirmDelete(target)">🗑️</button>
+        </td>
+      </tr>
+      <tr *ngIf="targets.length === 0">
+        <td colspan="3" class="empty-row">Aucune cible configurée. Ajoutez-en une pour commencer.</td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #loadingTpl><p class="muted">Chargement...</p></ng-template>
+</div>
+
+<!-- Formulaire ajout / édition -->
+<div class="modal-overlay" *ngIf="formMode !== 'none'" (click)="cancelForm()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>{{ formMode === 'edit' ? 'Modifier la cible' : 'Ajouter une cible' }}</h3>
+
+    <div class="form-group">
+      <label>Requête de recherche</label>
+      <input type="text" [(ngModel)]="formQuery" placeholder="ex: restaurants Lisbonne" />
+    </div>
+
+    <div class="form-group">
+      <label>Type d'activité (indice)</label>
+      <input type="text" [(ngModel)]="formBusinessTypeHint" placeholder="ex: restaurant" />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-outline" (click)="cancelForm()">Annuler</button>
+      <button class="btn-primary" (click)="submitForm()">{{ formMode === 'edit' ? 'Enregistrer' : 'Ajouter' }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation de suppression -->
+<div class="modal-overlay" *ngIf="targetPendingDeletion" (click)="cancelDelete()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Confirmer la suppression</h3>
+    <p>Voulez-vous vraiment supprimer la cible « {{ targetPendingDeletion.query }} » ?</p>
+
+    <div class="modal-actions">
+      <button class="btn-outline" (click)="cancelDelete()">Annuler</button>
+      <button class="btn-accent" (click)="executeDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>

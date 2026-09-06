@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { RouterModule } from '@angular/router';
+import { PipelineStateService } from '../../services/pipeline-state.service';
 
 @Component({
   selector: 'app-lead-search',
@@ -19,8 +20,8 @@ export class LeadSearchComponent {
   loading = false;
   result: any = null;
   errorMessage = '';
-
-  constructor(private api: ApiService) {}
+  busy$ = this.pipelineState.busy$;
+  constructor(private api: ApiService, private pipelineState: PipelineStateService) {}
 
   search(): void {
     if (!this.query.trim()) {

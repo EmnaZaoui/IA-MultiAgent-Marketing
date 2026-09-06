@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { RouterModule } from '@angular/router';
+import { PipelineStateService } from '../../services/pipeline-state.service';
 
 @Component({
   selector: 'app-leads-list',
@@ -20,8 +21,9 @@ export class LeadsListComponent implements OnInit {
   filterSector = '';
   filterSource = '';
 
-  constructor(private api: ApiService) {}
-
+  constructor(private api: ApiService, private pipelineState: PipelineStateService) {}
+  busy$ = this.pipelineState.busy$;
+  
   ngOnInit(): void { this.loadLeads(); }
 
   loadLeads(): void {

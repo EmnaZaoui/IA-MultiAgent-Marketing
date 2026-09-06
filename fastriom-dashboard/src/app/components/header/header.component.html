@@ -9,6 +9,7 @@
     <a routerLink="/recherche" routerLinkActive="active">Recherche de leads</a>
     <a routerLink="/leads" routerLinkActive="active">Leads</a>
     <a routerLink="/pipeline" routerLinkActive="active">Pipeline</a>
+    <a routerLink="/cibles" routerLinkActive="active">Cibles de recherche</a>
     <a routerLink="/a-propos" routerLinkActive="active">À propos</a>
   </nav>
 
@@ -18,3 +19,6 @@
     <div class="brand-fallback-fastriom">FASTRIOM</div>
   </div>
 </header>
+<div class="busy-banner" *ngIf="busy$ | async">
+  ⏳ {{ busyLabel$ | async }} — les actions sont temporairement désactivées.
+</div>

@@ -57,4 +57,31 @@ export class ApiService {
   getCampaign(runId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/campaigns/${runId}`);
   }
+
+  // ── Configuration des cibles de recherche (ICP) ────────
+  getSearchTargets(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/config/search-targets`);
+  }
+
+  addSearchTarget(payload: { query: string; business_type_hint?: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/config/search-targets`, payload);
+  }
+
+  updateSearchTarget(targetId: string, payload: { query: string; business_type_hint?: string }): Observable<any> {
+    return this.http.put(`${this.baseUrl}/config/search-targets/${targetId}`, payload);
+  }
+
+  deleteSearchTarget(targetId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/config/search-targets/${targetId}`);
+  }
+
+  updateMaxResultsPerTarget(value: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/config/search-targets/settings`, { max_results_per_target: value });
+  }
+
+
+
+
+
+
 }

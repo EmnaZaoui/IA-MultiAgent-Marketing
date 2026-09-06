@@ -1,52 +1,195 @@
 {
   "targets": [
-    {"query": "restaurants Tunis", "business_type_hint": "restaurant"},
-    {"query": "cafes Tunis", "business_type_hint": "cafe"},
-    {"query": "boulangeries Sfax", "business_type_hint": "boulangerie"},
-    {"query": "boutiques vetements Tunis", "business_type_hint": "boutique_vetements"},
-    {"query": "restaurants Sousse", "business_type_hint": "restaurant"},
-    {"query": "epiceries fines Tunis", "business_type_hint": "epicerie_fine"},
-
-    {"query": "restaurants Paris", "business_type_hint": "restaurant"},
-    {"query": "boulangeries Lyon", "business_type_hint": "boulangerie"},
-    {"query": "boutiques vetements Marseille", "business_type_hint": "boutique_vetements"},
-    {"query": "cafes Bordeaux", "business_type_hint": "cafe"},
-
-    {"query": "restaurants Casablanca", "business_type_hint": "restaurant"},
-    {"query": "boutiques Marrakech", "business_type_hint": "boutique_vetements"},
-    {"query": "cafes Rabat", "business_type_hint": "cafe"},
-
-    {"query": "restaurants Alger", "business_type_hint": "restaurant"},
-    {"query": "boulangeries Oran", "business_type_hint": "boulangerie"},
-
-    {"query": "restaurants Le Caire", "business_type_hint": "restaurant"},
-    {"query": "cafes Alexandrie", "business_type_hint": "cafe"},
-
-    {"query": "restaurants Dubai", "business_type_hint": "restaurant"},
-    {"query": "boutiques Abu Dhabi", "business_type_hint": "boutique_vetements"},
-
-    {"query": "restaurants Beyrouth", "business_type_hint": "restaurant"},
-
-    {"query": "restaurants Bruxelles", "business_type_hint": "restaurant"},
-    {"query": "cafes Geneve", "business_type_hint": "cafe"},
-    {"query": "boutiques Montreal", "business_type_hint": "boutique_vetements"},
-
-    {"query": "restaurants Dakar", "business_type_hint": "restaurant"},
-    {"query": "restaurants Abidjan", "business_type_hint": "restaurant"},
-
-    {"query": "restaurants Londres", "business_type_hint": "restaurant"},
-    {"query": "restaurants Madrid", "business_type_hint": "restaurant"},
-    {"query": "boutiques Barcelone", "business_type_hint": "boutique_vetements"},
-    {"query": "restaurants Rome", "business_type_hint": "restaurant"},
-    {"query": "boutiques Milan", "business_type_hint": "boutique_vetements"},
-    {"query": "restaurants Lisbonne", "business_type_hint": "restaurant"},
-
-    {"query": "restaurants New York", "business_type_hint": "restaurant"},
-    {"query": "restaurants Miami", "business_type_hint": "restaurant"},
-    {"query": "restaurants Toronto", "business_type_hint": "restaurant"},
-
-    {"query": "restaurants Singapour", "business_type_hint": "restaurant"},
-    {"query": "restaurants Bangkok", "business_type_hint": "restaurant"}
+    {
+      "query": "restaurants Tunis",
+      "business_type_hint": "restaurant",
+      "id": "b02131c9de1c"
+    },
+    {
+      "query": "cafes Tunis",
+      "business_type_hint": "cafe",
+      "id": "56d5148b8efa"
+    },
+    {
+      "query": "boulangeries Sfax",
+      "business_type_hint": "boulangerie",
+      "id": "a829c5e113ce"
+    },
+    {
+      "query": "boutiques vetements Tunis",
+      "business_type_hint": "boutique_vetements",
+      "id": "413bb48d6431"
+    },
+    {
+      "query": "restaurants Sousse",
+      "business_type_hint": "restaurant",
+      "id": "1b2b9078089e"
+    },
+    {
+      "query": "epiceries fines Tunis",
+      "business_type_hint": "epicerie_fine",
+      "id": "0d2a34cf7e49"
+    },
+    {
+      "query": "restaurants Paris",
+      "business_type_hint": "restaurant",
+      "id": "ebe7e2cbeecf"
+    },
+    {
+      "query": "boulangeries Lyon",
+      "business_type_hint": "boulangerie",
+      "id": "e7c1a1ef2b11"
+    },
+    {
+      "query": "boutiques vetements Marseille",
+      "business_type_hint": "boutique_vetements",
+      "id": "907f448d9d9b"
+    },
+    {
+      "query": "cafes Bordeaux",
+      "business_type_hint": "cafe",
+      "id": "6cc07dd95701"
+    },
+    {
+      "query": "restaurants Casablanca",
+      "business_type_hint": "restaurant",
+      "id": "c6c6b5f83be2"
+    },
+    {
+      "query": "boutiques Marrakech",
+      "business_type_hint": "boutique_vetements",
+      "id": "f452d4c48bf4"
+    },
+    {
+      "query": "cafes Rabat",
+      "business_type_hint": "cafe",
+      "id": "f4bcea913bbf"
+    },
+    {
+      "query": "restaurants Alger",
+      "business_type_hint": "restaurant",
+      "id": "408a3f1caffb"
+    },
+    {
+      "query": "boulangeries Oran",
+      "business_type_hint": "boulangerie",
+      "id": "d116dea3582d"
+    },
+    {
+      "query": "restaurants Le Caire",
+      "business_type_hint": "restaurant",
+      "id": "69ce04aaaa60"
+    },
+    {
+      "query": "cafes Alexandrie",
+      "business_type_hint": "cafe",
+      "id": "b4b0d4ae31ba"
+    },
+    {
+      "query": "restaurants Dubai",
+      "business_type_hint": "restaurant",
+      "id": "a96cba7fee19"
+    },
+    {
+      "query": "boutiques Abu Dhabi",
+      "business_type_hint": "boutique_vetements",
+      "id": "09b84830a30b"
+    },
+    {
+      "query": "restaurants Beyrouth",
+      "business_type_hint": "restaurant",
+      "id": "6875852c5215"
+    },
+    {
+      "query": "restaurants Bruxelles",
+      "business_type_hint": "restaurant",
+      "id": "678fce68bb60"
+    },
+    {
+      "query": "cafes Geneve",
+      "business_type_hint": "cafe",
+      "id": "19c344316a33"
+    },
+    {
+      "query": "boutiques Montreal",
+      "business_type_hint": "boutique_vetements",
+      "id": "4d2d07a95a50"
+    },
+    {
+      "query": "restaurants Dakar",
+      "business_type_hint": "restaurant",
+      "id": "b6c14b9626a2"
+    },
+    {
+      "query": "restaurants Abidjan",
+      "business_type_hint": "restaurant",
+      "id": "36701281e398"
+    },
+    {
+      "query": "restaurants Londres",
+      "business_type_hint": "restaurant",
+      "id": "c1179b25790b"
+    },
+    {
+      "query": "restaurants Madrid",
+      "business_type_hint": "restaurant",
+      "id": "7deada2efbe8"
+    },
+    {
+      "query": "boutiques Barcelone",
+      "business_type_hint": "boutique_vetements",
+      "id": "040213b80c79"
+    },
+    {
+      "query": "restaurants Rome",
+      "business_type_hint": "restaurant",
+      "id": "012c6c93e37d"
+    },
+    {
+      "query": "boutiques Milan",
+      "business_type_hint": "boutique_vetements",
+      "id": "aa7f3cf74758"
+    },
+    {
+      "query": "restaurants Lisbonne",
+      "business_type_hint": "restaurant",
+      "id": "7c5d307759ca"
+    },
+    {
+      "query": "restaurants New York",
+      "business_type_hint": "restaurant",
+      "id": "2cd69a42de33"
+    },
+    {
+      "query": "restaurants Miami",
+      "business_type_hint": "restaurant",
+      "id": "f2cb0eced0df"
+    },
+    {
+      "query": "restaurants Toronto",
+      "business_type_hint": "restaurant",
+      "id": "07bc2509a582"
+    },
+    {
+      "query": "restaurants Singapour",
+      "business_type_hint": "restaurant",
+      "id": "7b828176d082"
+    },
+    {
+      "query": "restaurants Bangkok",
+      "business_type_hint": "restaurant",
+      "id": "b41350565a54"
+    },
+    {
+      "id": "174ff771bf35",
+      "query": "hotel mounastir",
+      "business_type_hint": "hotel"
+    },
+    {
+      "id": "e94ddf64f476",
+      "query": "hotel tabarka",
+      "business_type_hint": "hotel"
+    }
   ],
   "max_results_per_target": 8
 }

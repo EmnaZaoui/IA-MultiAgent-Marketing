@@ -38,6 +38,7 @@ def create_app():
     from app.routes.tracking import tracking_bp
     from app.routes.delivery_webhooks import delivery_webhooks_bp
     from app.routes.campaigns import campaigns_bp
+    from app.routes.search_targets import search_targets_bp
 
     # Enregistrer les blueprints
     app.register_blueprint(ingestion_bp, url_prefix="/api/v1/leads")
@@ -48,7 +49,8 @@ def create_app():
     app.register_blueprint(tracking_bp, url_prefix="/api/v1")
     app.register_blueprint(delivery_webhooks_bp, url_prefix="/api/v1")
     app.register_blueprint(campaigns_bp, url_prefix="/api/v1")
-
+    app.register_blueprint(search_targets_bp, url_prefix="/api/v1")
+    
     @app.get("/health")
     def health():
         return {"status": "ok", "service": "AI_MultiAgent_Marketing"}

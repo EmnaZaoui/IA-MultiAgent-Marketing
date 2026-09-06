@@ -52,11 +52,11 @@
         <td>{{ lead.source }}</td>
         <td class="actions-cell">
           <button class="btn-outline btn-sm" (click)="enrich(lead.id)"
-                  [disabled]="actionInProgress[lead.id] === 'enrich' || lead.status !== 'LEAD_IMPORTED'">
+                  [disabled]="actionInProgress[lead.id] === 'enrich' || lead.status !== 'LEAD_IMPORTED' || (busy$ | async) === true">
             {{ actionInProgress[lead.id] === 'enrich' ? '⏳' : '🌐 Enrichir' }}
           </button>
           <button class="btn-outline btn-sm" (click)="generateEmail(lead.id)"
-                  [disabled]="actionInProgress[lead.id] === 'email' || lead.status !== 'ENRICHED'">
+                  [disabled]="actionInProgress[lead.id] === 'email' || lead.status !== 'ENRICHED' || (busy$ | async)">
             {{ actionInProgress[lead.id] === 'email' ? '⏳' : '✉️ Générer email' }}
           </button>
         </td>

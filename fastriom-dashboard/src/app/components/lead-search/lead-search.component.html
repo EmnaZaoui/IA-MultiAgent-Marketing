@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <button class="btn-primary" (click)="search()" [disabled]="loading">
+  <button class="btn-primary" (click)="search()" [disabled]="loading || (busy$ | async)">
     {{ loading ? '⏳ Recherche en cours...' : '🔍 Lancer la recherche' }}
   </button>
 
